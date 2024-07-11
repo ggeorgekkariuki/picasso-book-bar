@@ -23,7 +23,7 @@ def books():
     from functions import recommend_books, recommended_author
 
     # Webpage Titles
-    st.header("Picasso's - Bar But For Books")
+    st.header("Picasso's Bar - But For Books")
     st.subheader("A book recommendation system using Machine Learning")
 
     # Drop Down Button for selecting a book
@@ -60,7 +60,7 @@ def authors():
     from functions import recommended_author
 
     # Webpage Titles
-    st.header("Picasso's - Art is for Artist ")
+    st.header("Picasso's Lounge - Art is for Artist")
     st.subheader("An Author recommendation system using Machine Learning")
 
     # Drop Down Button for selecting a book
