@@ -49,24 +49,28 @@ def recommend_books(book_name):
     return book_list, poster_url
 
 class AuthorsDetails():
-    def __init__(self, author_id, author='None'):
+    def __init__(self, author_id=None, author='None'):
         self.author_id = author_id
+        self.author = author
+        
+        if self.author_id == None:
+            self.author_id = np.where(author_pivot.index == author)[0][0]
 
         if author == 'None':
             self.author = author_pivot.index[self.author_id]
 
     def fetch_author(self):
-        # Return the name of the author
+        # Find the location of the book in the main df
+        # Book
         return self.author
 
     def fetch_top_rated(self):
         # Top Rated Books
-        books = []
-        for book in final_rating[final_rating['author'] == self.author]\
+        book = final_rating[final_rating['author'] == self.author]\
                 .sort_values(by='rating', ascending=False)['title']\
-                .unique()[:5]:
-            books.append(book)
-        return books
+                .unique()[0]
+        self.top_suggestion = book
+        return book
     
 def recommended_author(author_name):
     """This function takes an authors name and returns other book suggestions"""
