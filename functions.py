@@ -2,13 +2,20 @@ from pickles import *
 import numpy as np
 
 class BookDetails():
-    def __init__(self, book_idx):
+    def __init__(self, book_idx=None, name=None):
         self.book_idx = book_idx
-        self.df_idx = np.where(final_rating['title'] == book_pivot.index[self.book_idx])[0][0]
+        self.name = name
+
+        if name == None:
+            self.df_idx = np.where(final_rating['title'] == book_pivot.index[self.book_idx])[0][0]
+        else:
+            self.df_idx = np.where(final_rating['title'] == self.name)[0][0]
 
     def fetch_book(self):
         # Find the location of the book in the main df
         # Book
+        if self.name:
+            return self.name
         return book_pivot.index[self.book_idx]
 
     def fetch_poster(self):
@@ -16,7 +23,7 @@ class BookDetails():
         return final_rating.iloc[self.df_idx]['img_url']
 
     def fetch_author(self):
-        # Author
+        # URLs
         return final_rating.iloc[self.df_idx]['author']
 
 # Function to recommend books
