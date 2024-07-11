@@ -28,3 +28,6 @@ Types:
 ### Data Source
 
 The data was sourced from [Kaggle](https://www.kaggle.com/datasets/ra4u12/bookrecommendation)
+
+### Modelling
+Using the NearestNeighbors algorithm, a cluster was formed that tagged each book or author to a particular cluster that enabled suggestion of books or authors according to the distance.
