@@ -1,13 +1,29 @@
 import streamlit as st
 
+def intro():
+    import streamlit as st
+
+    st.header("Picasso's Bar and Lounge")
+    st.subheader("Welcome to Picasso's - We love books and love machine learning")
+    st.text("Visit our side bar to get fresh recommendations")
+
+    st.write("""
+             This project utilises Machine Learning to create a recommendation system using the Collaborative Filtering Recommendation System.
+
+             The data was sourced by from Kaggle - Book Recommendation Competition.
+
+             This was a little fun (3 days of constant frustration) to create
+             """)
+
 def books():
+    # Imports
     import streamlit as st
     import numpy as np
-    from pickles import book_names, author_names
+    from pickles import book_names
     from functions import recommend_books, recommended_author
 
     # Webpage Titles
-    st.header("Picasso's But For Books")
+    st.header("Picasso's - Bar But For Books")
     st.subheader("A book recommendation system using Machine Learning")
 
     # Drop Down Button for selecting a book
@@ -43,6 +59,10 @@ def authors():
     from pickles import author_names
     from functions import recommended_author
 
+    # Webpage Titles
+    st.header("Picasso's - Art is for Artist ")
+    st.subheader("An Author recommendation system using Machine Learning")
+
     # Drop Down Button for selecting a book
     selected_author = st.selectbox(label="Please type or select an author", options=author_names)
 
@@ -55,32 +75,29 @@ def authors():
 
         # Render the columns
         with col1:
-            st.text(recommended_author[1])# Book Title
-            st.text(book_title[1]) # Poster
+            st.text(book_title[1]) # Title
             st.image(poster[1]) # Poster
         with col2:
-            st.text(recommended_author[2])# Book Title
             st.text(book_title[2])
             st.image(poster[2])
         with col3:
-            st.text(recommended_author[3])# Book Title
             st.text(book_title[3])
             st.image(poster[3])
         with col4:
-            st.text(recommended_author[4])# Book Title
             st.text(book_title[4])
             st.image(poster[4])
         with col5:
-            st.text(recommended_author[5])# Book Title
-            st.text(book_title[5]) # Poster
+            st.text(book_title[5]) 
             st.image(poster[5])
 
+# Pages
 page_names_to_funcs = {
-    # "—": intro,
+    "intro": intro,
     "Book Aisle": books,
-    "Authors Parade": authors,
-    # "DataFrame Demo": data_frame_demo
+    "Authors Parade": authors
 }
 
+# Side Bar
+st.sidebar.header("Please Select An Item From the selection below.")
 demo_name = st.sidebar.selectbox("Select a page", page_names_to_funcs.keys())
 page_names_to_funcs[demo_name]()
