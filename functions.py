@@ -73,7 +73,7 @@ class AuthorsDetails():
         return book
     
 def recommended_author(author_name):
-    """This function takes an authors name and returns other book suggestions"""
+    """This function takes a booklist of name and returns other book suggestions"""
     # Obtain the book ID
     idx = np.where(author_pivot.index == author_name)[0][0]
 
@@ -83,12 +83,16 @@ def recommended_author(author_name):
     # Distances and suggestions
     distance, suggestion = author_model.kneighbors(record, n_neighbors=6)
 
-    # Empty book list to store the books
-    authors, top_rated = [], []
+    # Empty list to store the books details
+    authors, top_rated, poster = [], [], []
 
     for idx in suggestion[0]:
-        book = AuthorsDetails(idx)
-        authors.append(book.fetch_author())
-        top_rated.append(book.fetch_top_rated())
+        author = AuthorsDetails(idx)
+        authors.append(author.fetch_author())
+        top_rated.append(author.fetch_top_rated())
 
-    return authors, top_rated
+    for item in top_rated:
+        book = BookDetails(name=item)
+        poster.append(book.fetch_poster())
+
+    return authors, top_rated, poster
