@@ -92,7 +92,7 @@ def authors():
 
 # Pages
 page_names_to_funcs = {
-    "intro": intro,
+    "Home": intro,
     "Book Aisle": books,
     "Authors Parade": authors
 }
