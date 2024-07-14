@@ -40,7 +40,7 @@ def recommend_books(book_name):
     book_list, poster_url, authors, ratings= [], [], [], []
 
     for idx in suggestion[0]:
-        book = BookDetailss(idx)
+        book = BookDetails(idx)
         book_list.append(book.fetch_book())
         poster_url.append(book.fetch_poster())
         authors.append(book.fetch_author())
@@ -68,7 +68,7 @@ class AuthorsDetails():
         return book_name
     
     def fetch_mean_rating(self):
-        return self.df[np.argmax(self.df)]
+        return round(self.df[np.argmax(self.df)], 1)
     
     def fetch_poster(self):
         book_name = self.df.index[np.argmax(self.df)]
