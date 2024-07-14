@@ -2,33 +2,31 @@ from pickles import *
 import numpy as np
 
 class BookDetails():
-    def __init__(self, book_idx=None, name=None):
-        self.book_idx = book_idx
-        self.name = name
-
-        if name == None:
-            self.df_idx = np.where(final_rating['title'] == book_pivot.index[self.book_idx])[0][0]
+    def __init__(self, book_id=None, name=None):
+        if book_id != None and name == None:
+            self.book_name = book_pivot.index[book_id]
         else:
-            self.df_idx = np.where(final_rating['title'] == self.name)[0][0]
-
+            self.book_name = name
+            
+        self.book_records = final_rating[final_rating['title']==self.book_name]
+        
     def fetch_book(self):
-        # Find the location of the book in the main df
-        # Book
-        if self.name:
-            return self.name
-        return book_pivot.index[self.book_idx]
-
+        return self.book_name
+    
     def fetch_poster(self):
-        # URLs
-        return final_rating.iloc[self.df_idx]['img_url']
-
+        return self.book_records.iloc[0]['img_url']
+    
     def fetch_author(self):
-        # URLs
-        return final_rating.iloc[self.df_idx]['author']
+        return self.book_records.iloc[0]['author']
+    
+    def fetch_mean_ratings(self):
+        avg_rating = round(self.book_records.groupby('title')['rating'].mean().values[0], 1)
+        return avg_rating
 
 # Function to recommend books
 def recommend_books(book_name):
-    """This function takes in a book title and returns a list of books, poster_urls and authors"""
+    """This function takes in a name of a book
+    and returns other book suggestions"""
     # Obtain the book ID
     book_id = np.where(book_pivot.index == book_name)[0][0]
 
@@ -39,38 +37,44 @@ def recommend_books(book_name):
     distance, suggestion = book_model.kneighbors(record, n_neighbors=6)
 
     # Empty book list to store the books
-    book_list, poster_url = [], []
+    book_list, poster_url, authors, ratings= [], [], [], []
 
     for idx in suggestion[0]:
-        book = BookDetails(idx)
+        book = BookDetailss(idx)
         book_list.append(book.fetch_book())
         poster_url.append(book.fetch_poster())
+        authors.append(book.fetch_author())
+        ratings.append(book.fetch_mean_ratings())
 
-    return book_list, poster_url
+    return book_list, poster_url, authors, ratings
 
 class AuthorsDetails():
-    def __init__(self, author_id=None, author='None'):
-        self.author_id = author_id
-        self.author = author
+    def __init__(self, author_id=None, name=None):
+        if author_id != None and name == None:
+            self.author_name = author_pivot.index[author_id]
+        else:
+            self.author_name = name
+            
+        # Contains all the Authors books in the database    
+        self.authors_books = final_rating[final_rating['author']==self.author_name]
+        # Group the books by their average ratings in descending order
+        self.df = self.authors_books.groupby(['title'])['rating'].mean().sort_values(ascending=False)
         
-        if self.author_id == None:
-            self.author_id = np.where(author_pivot.index == author)[0][0]
-
-        if author == 'None':
-            self.author = author_pivot.index[self.author_id]
-
     def fetch_author(self):
-        # Find the location of the book in the main df
-        # Book
-        return self.author
-
+        return self.author_name
+    
     def fetch_top_rated(self):
-        # Top Rated Books
-        book = final_rating[final_rating['author'] == self.author]\
-                .sort_values(by='rating', ascending=False)['title']\
-                .unique()[0]
-        self.top_suggestion = book
-        return book
+        book_name = self.df.index[np.argmax(self.df)]
+        return book_name
+    
+    def fetch_mean_rating(self):
+        return self.df[np.argmax(self.df)]
+    
+    def fetch_poster(self):
+        book_name = self.df.index[np.argmax(self.df)]
+        poster = final_rating.loc[(final_rating['title'] == book_name) 
+                         & (final_rating['author'] == self.author_name)]['img_url'].iloc[0]
+        return poster
     
 def recommended_author(author_name):
     """This function takes a booklist of name and returns other book suggestions"""
@@ -83,16 +87,14 @@ def recommended_author(author_name):
     # Distances and suggestions
     distance, suggestion = author_model.kneighbors(record, n_neighbors=6)
 
-    # Empty list to store the books details
-    authors, top_rated, poster = [], [], []
+    # Empty book list to store the books
+    authors, top_rated_books, posters, ratings = [], [], [], []
 
     for idx in suggestion[0]:
         author = AuthorsDetails(idx)
         authors.append(author.fetch_author())
-        top_rated.append(author.fetch_top_rated())
+        top_rated_books.append(author.fetch_top_rated())
+        posters.append(author.fetch_poster())
+        ratings.append(author.fetch_mean_rating())
 
-    for item in top_rated:
-        book = BookDetails(name=item)
-        poster.append(book.fetch_poster())
-
-    return authors, top_rated, poster
+    return authors, top_rated_books, posters, ratings
