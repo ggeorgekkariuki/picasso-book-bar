@@ -105,11 +105,44 @@ def authors():
             st.image(poster[5])
             st.write(f"Rated: {ratings[5]}")
 
+def more_works():
+
+    import streamlit as st
+    from pickles import author_names
+    from functions import author_more_works
+
+    # Webpage Titles
+    st.header("Picasso's Meet and Greet")
+    st.subheader("Find out more works by your favorite (or soon to be you favorite) Author")
+
+    # Drop Down Button for selecting a book
+    selected_author = st.selectbox(label="Please type or select an author", options=author_names)
+
+    # Create a button that returns a recommendation
+    if st.button('Show Author Recommendation'):
+
+        book_title, ratings, poster = author_more_works(selected_author)
+
+        st.write(f"You selected {selected_author} and we found {len(book_title)} book(s) that you might enjoy:")
+
+        # Define columns for the posters
+        col1, col2, col3 = st.columns(3)
+
+        columns = [col1, col2, col3]
+
+        # Here
+        for item in range(len(book_title)):
+            with columns[item]:
+                st.text(book_title[item]) # Title
+                st.image(poster[item]) # Poster
+                st.write(f"Rated: {ratings[item]}")
+
 # Pages
 page_names_to_funcs = {
     "Home": intro,
     "Book Aisle": books,
-    "Authors Parade": authors
+    "Authors Parade": authors,
+    "Author's Works": more_works
 }
 
 # Side Bar

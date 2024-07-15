@@ -67,6 +67,17 @@ class AuthorsDetails():
         book_name = self.df.index[np.argmax(self.df)]
         return book_name
     
+    def top_books(self):
+        """Top 2 books and their posters"""
+        books = self.df.iloc[:3]
+        book_names = list(books.index)
+        book_ratings = [round(rating, 1) for rating in books.values]
+        posters = []
+        for book in book_names:
+            posters.append(final_rating.loc[(final_rating['title'] == book) 
+                         & (final_rating['author'] == self.author_name)]['img_url'].iloc[0])
+        return book_names, book_ratings, posters
+    
     def fetch_mean_rating(self):
         return round(self.df[np.argmax(self.df)], 1)
     
@@ -98,3 +109,9 @@ def recommended_author(author_name):
         ratings.append(author.fetch_mean_rating())
 
     return authors, top_rated_books, posters, ratings
+
+def author_more_works(name):
+    """Find at least 5 top rated works by an author"""
+    author = AuthorsDetails(name=name)
+    book, rating, poster = author.top_books()
+    return book, rating, poster
