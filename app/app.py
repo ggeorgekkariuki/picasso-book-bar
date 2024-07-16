@@ -7,13 +7,19 @@ def intro():
     st.subheader("Welcome to Picasso's - We love books and love machine learning")
     st.text("Visit our side bar to get fresh recommendations")
 
+    github_url = "https://github.com/ggeorgekkariuki/picasso-book-bar/tree/master"
+
     st.write("""
              This project utilises Machine Learning to create a recommendation system using the Collaborative Filtering Recommendation System.
 
              The data was sourced by from Kaggle - Book Recommendation Competition.
 
-             This was a little fun (3 days of constant frustration) to create
-             """)
+             This was a little fun (10 days of constant frustration) to create.
+
+             Please enjoy.
+
+             Use the github link for the [source code](%s)
+             """ % github_url)
 
 def books():
     # Imports
