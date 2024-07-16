@@ -1,10 +1,14 @@
 # Picasso Library - But For Books
 
+View the [streamlit app here](https://picaapp-book-bar.streamlit.app/)
+
 ### Tools used:
 
 1. StreamLit
 2. Pandas
-3. Heroku Deployment
+3. Python
+4. Matplotlib
+5. Seaborn
 
 ## What are Recommendation Systems
 
